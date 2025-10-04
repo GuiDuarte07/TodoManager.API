@@ -1,8 +1,13 @@
 // Program.cs - Trecho de configuração
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TodoManager.Data;
 using TodoManager.Models;
+using TodoManager.Repositories;
+using TodoManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,23 +17,59 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString)); // Usando UseNpgsql
+    options.UseNpgsql(connectionString)); 
 
-// 2. Configurar Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
 
-// 3. Configurar JWT Authentication (Opcional: Necessário para a API)
-// Configuração detalhada do JWT (Key, Issuer, Audience) deve ser adicionada aqui e em appsettings.json.
-// ... Código de configuração do JWT Bearer, usando AddAuthentication e AddJwtBearer ...
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+
+    options.User.RequireUniqueEmail = true;
+
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"] ?? "");
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidateAudience = true,
+        ValidAudience = jwtSettings["Audience"],
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
 
 
 builder.Services.AddAuthorization();
 
-// 4. Configurar Serviços e Repositórios (DI)
-// Exemplo: builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-// Exemplo: builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
+builder.Services.AddScoped<ITodoItemService, TodoItemService>();
+
 
 
 builder.Services.AddControllers();

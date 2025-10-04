@@ -10,10 +10,7 @@ namespace TodoManager.DTOs.TodoItem
 
         [MaxLength(500)]
         public string Description { get; set; }
-
-        // Opcional
         public DateTime? DueDate { get; set; }
 
-        // Status não é necessário na criação, pois o valor padrão é 'Pending'
     }
 }

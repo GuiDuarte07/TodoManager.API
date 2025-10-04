@@ -58,6 +58,7 @@ namespace TodoManager.Data
             {
                 entity.Property(e => e.Email).HasMaxLength(256);
                 entity.Property(e => e.UserName).HasMaxLength(256);
+                entity.Property(e => e.Name).HasMaxLength(256);
             });
         }
     }

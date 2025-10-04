@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  # 1. Serviço do Banco de Dados PostgreSQL
   postgresdb:
     image: postgres:16-alpine
     container_name: todomanager-db
+    restart: always 
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -12,25 +12,24 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
-
-  # 2. Serviço da API .NET
-  todomanager-api:
+        - "5432:5432" 
+    
+  todomanager:
+    image: ${DOCKER_REGISTRY-}todomanager
     build:
       context: .
-      # O Dockerfile deve estar dentro da nova pasta do projeto .NET
-      dockerfile: TodoManager.Api/Dockerfile 
+      dockerfile: TodoManager/Dockerfile
     container_name: todomanager-api
+    ports:
+        - "8080:8080" 
+        - "8081:8081"
+    
     depends_on:
       - postgresdb
+      
     environment:
-      # Use o nome do serviço do Docker Compose (postgresdb) como hostname do DB
       ConnectionStrings__DefaultConnection: Host=postgresdb;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
-      # Definindo a porta de execução da API, para rodar na 8080.
-      ASPNETCORE_URLS: http://+:8080 
-    ports:
-      - "8080:8080" # Mapeia a porta 8080 do container para a máquina local
 
-# Volumes para persistência dos dados do banco
+
 volumes:
   postgres_data:
