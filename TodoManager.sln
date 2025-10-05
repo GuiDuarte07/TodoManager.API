@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoManager", "TodoManager\
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{00369709-3539-473A-88EC-5713A6A310C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoManager.Tests", "Tests\TodoManager.Tests.csproj", "{2B30DC6D-2CAC-47F3-9675-09C2290B6919}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{00369709-3539-473A-88EC-5713A6A310C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00369709-3539-473A-88EC-5713A6A310C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00369709-3539-473A-88EC-5713A6A310C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B30DC6D-2CAC-47F3-9675-09C2290B6919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B30DC6D-2CAC-47F3-9675-09C2290B6919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B30DC6D-2CAC-47F3-9675-09C2290B6919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B30DC6D-2CAC-47F3-9675-09C2290B6919}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
