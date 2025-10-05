@@ -1,4 +1,4 @@
-using Moq;
+Ôªøusing Moq;
 using TodoManager.DTOs.TodoItem;
 using TodoManager.Models;
 using TodoManager.Repositories;
@@ -41,7 +41,7 @@ namespace TodoManager.Tests.Services
             var result = await _service.GetByIdAsync(1, "user1");
 
             Assert.False(result.IsSuccess);
-            Assert.Equal("Tarefa n„o encontrado ou sem permiss„o.", result.Error);
+            Assert.Equal("Tarefa n√£o encontrado ou sem permiss√£o.", result.Error);
         }
 
         [Fact]
