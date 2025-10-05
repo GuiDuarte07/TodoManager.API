@@ -30,6 +30,9 @@ services:
     environment:
       ConnectionStrings__DefaultConnection: Host=postgresdb;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
 
+networks:
+  default:
+    driver: bridge
 
 volumes:
   postgres_data:
