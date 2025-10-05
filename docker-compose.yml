@@ -28,7 +28,35 @@ services:
       - postgresdb
       
     environment:
-      ConnectionStrings__DefaultConnection: Host=postgresdb;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+      - DOTNET_RUNNING_IN_CONTAINER=true
+      - ASPNETCORE_URLS=http://+:8080;http://+:8081
+      - ConnectionStrings__DefaultConnection=Host=postgresdb;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+  
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    depends_on:
+      - todomanager
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    entrypoint: >
+      sh -c "trap exit TERM; while :; do
+        certbot renew --webroot -w /var/www/certbot;
+        sleep 12h & wait $${!};
+      done"
 
 networks:
   default:
