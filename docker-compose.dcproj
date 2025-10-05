@@ -17,5 +17,6 @@
     <None Include=".dockerignore" />
     <None Include=".env" />
     <None Include="nginx\default.conf" />
+    <None Include="nginx\options-ssl-nginx.conf" />
   </ItemGroup>
 </Project>
