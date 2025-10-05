@@ -4,8 +4,7 @@ namespace TodoManager.Common
 {
     public class TodoQueryParameters
     {
-        // Paginação
-        private const int MaxPageSize = 50; // Limite máximo suportado
+        private const int MaxPageSize = 1000; // Limite máximo
         public int PageNumber { get; set; } = 1;
 
         private int _pageSize = 10;
@@ -15,13 +14,11 @@ namespace TodoManager.Common
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
 
-        // Filtros
         public TodoItemStatus? Status { get; set; }
         public DateTime? DueDateFrom { get; set; }
         public DateTime? DueDateTo { get; set; } 
         public string? SearchTerm { get; set; } 
 
-        // Ordenação
         public string OrderBy { get; set; } = "CreatedAtDesc"; // Ex: "DueDateAsc", "TitleAsc"
     }
 }

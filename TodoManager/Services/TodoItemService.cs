@@ -37,15 +37,19 @@ namespace TodoManager.Services
                 return Result<TodoItemDto>.Failure("Tarefa não encontrado ou sem permissão.");
             }
 
-            // Mapeamento e Atualização
             existingItem.Title = dto.Title;
             existingItem.Description = dto.Description;
             existingItem.DueDate = dto.DueDate;
             existingItem.Status = dto.Status;
             existingItem.UpdatedAt = DateTime.UtcNow;
 
-            var updatedItem = await _repository.UpdateAsync(existingItem);
-            return Result<TodoItemDto>.Success(updatedItem.MapToTodoItemDto());
+            try
+            {
+                var updatedItem = await _repository.UpdateAsync(existingItem);
+                return Result<TodoItemDto>.Success(updatedItem.MapToTodoItemDto());
+            } catch (Exception ex) {
+                return Result<TodoItemDto>.Failure(ex.Message);
+            }
         }
 
         public async Task<Result> DeleteAsync(int id, string userId)
@@ -57,8 +61,16 @@ namespace TodoManager.Services
                 return Result.Failure("Tarefa não encontrado ou sem permissão.");
             }
 
-            await _repository.DeleteAsync(itemToDelete);
-            return Result.Success();
+            try
+            {
+                await _repository.DeleteAsync(itemToDelete);
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure(ex.Message);
+            }
+            
         }
 
         public async Task<Result<IPagedListDto<TodoItemDto>>> GetAllAsync(string userId, TodoQueryParameters parameters)
@@ -91,9 +103,15 @@ namespace TodoManager.Services
                 UserId = userId
             };
 
-            var createdItem = await _repository.AddAsync(itemToCreate);
-
-            return Result<TodoItemDto>.Success(createdItem.MapToTodoItemDto());
+            try
+            {
+                var createdItem = await _repository.AddAsync(itemToCreate);
+                return Result<TodoItemDto>.Success(createdItem.MapToTodoItemDto());
+            }
+            catch (Exception ex)
+            {
+                return Result<TodoItemDto>.Failure(ex.Message);
+            }
         }
     }
 }

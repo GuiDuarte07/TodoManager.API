@@ -18,7 +18,7 @@ namespace TodoManager.Repositories
         public async Task<TodoItem?> GetByIdAsync(int id, string userId)
         {
             return await _context.TodoItems
-                .Include(t => t.User) // Inclui o usuário para o DTO
+                .Include(t => t.User)
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
         }
 

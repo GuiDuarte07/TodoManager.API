@@ -97,7 +97,6 @@ namespace TodoManager.Controllers
 
         private string GetUserId()
         {
-            // Obtém o ID do usuário (Identity ID) a partir do token JWT
             return User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         }
 

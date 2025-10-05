@@ -33,6 +33,7 @@ namespace TodoManager.Data
                     .IsRequired(false);
 
                 entity.Property(t => t.DueDate)
+                .HasColumnType("timestamp without time zone")
                 .IsRequired(false);
 
                 entity.Property(t => t.Status)
