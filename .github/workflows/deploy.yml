@@ -19,13 +19,13 @@ jobs:
         dotnet-version: '8.0.x' 
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore TodoManager.sln
 
     - name: Build
-      run: dotnet build TodoManager.API/TodoManager.API.csproj --configuration Release
+      run: dotnet build TodoManager.sln --configuration Release
 
     - name: Run tests
-      run: dotnet test TodoManager.Tests/TodoManager.Tests.csproj --configuration Release --verbosity normal
+      run: dotnet test TodoManager.sln --configuration Release --verbosity normal
 
   deploy:
     needs: build-and-test
