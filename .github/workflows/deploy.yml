@@ -20,7 +20,7 @@ jobs:
 
     - name: Deploy via Git pull and Docker Compose
       run: |
-        ssh -o StrictHostKeyChecking=no ec2-user@YOUR_EC2_PUBLIC_IP "
+        ssh -o StrictHostKeyChecking=no ec2-user@54.196.152.174 "
           cd ~/TodoManager.API &&
           git reset --hard origin/master &&
           git pull origin master &&
