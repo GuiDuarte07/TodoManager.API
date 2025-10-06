@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,6 +8,7 @@ using TodoManager.Models;
 using TodoManager.DTOs.Auth;
 using TodoManager.Data;
 using Microsoft.EntityFrameworkCore;
+using TodoManager.Common;
 
 namespace TodoManager.Controllers
 {
@@ -50,7 +51,10 @@ namespace TodoManager.Controllers
                 return Ok(new { message = "Usuário criado com sucesso!" });
             }
 
-            return BadRequest(result.Errors);
+
+
+            var error = IdentityErrorDescriberPt.GetFirstErrorMessage(result.Errors);
+            return BadRequest(new { error });
         }
 
         [HttpPost("login")]
@@ -59,7 +63,7 @@ namespace TodoManager.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
-                return Unauthorized(new { message = "Credenciais inválidas" });
+                return Unauthorized(new { error = "Credenciais inválidas" });
 
             var result = await _signInManager.CheckPasswordSignInAsync(
                 user, model.Password, false);
