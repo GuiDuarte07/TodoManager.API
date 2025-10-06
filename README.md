@@ -48,6 +48,20 @@ Toda a infraestrutura foi projetada para ser modular, segura e facilmente escal�
     
 ---
 
+## 🎈 Detalhes
+
+O API REST da aplicação contempla vários quesitos, funcionais e não funcionais, todo o CRUD para geranciar tarefas foram feitos, sempre mantendo boas práticas e conceitos REST,
+também escrevi alguns testes usando Xunit, mas devido a aplicação não ter muita regra de negocio e devido o tempo também, não é tão extensa a quantidade de testes.
+Usei o Docker, Docker Compose para criação dos conteiners necessários para aplicação, isso é, o .NET, postgres, NGINX, certbot. A parte mais difícil desse projeto foi justamente
+gerenciar as requisições de forma correta usando portas padrões para requisições HTTPS (443) e redirecionamento para porta HTTP (80), por isso foi necessário usar o 
+servidor de proxy reverso, no caso, NGINX e como as requisições HTTPS requerem um certificado digital para descriptografia das mensagens, o certbot resolve essa necessidade.
+Aprendi bastante coisa fazendo esse projeto, em relação a CI/CD eu não entendia muito ainda, mas fiz questão de estudar para conseguir criar um workflow para esse projeto,
+usando Github Actions, ao realizar um push para a branch master, é criado uma Action que vai fazer o build e realizar os testes da nova versão, para ver se está tudo ok, estando ok
+o workflow acessa minha instância EC2 e faz o rebuild da aplicação por lá. 
+Além disso, a rota de GET do TODO foi criada com paginação, para evitar travamentos do Front-end. 
+
+---
+
 ## 🌐 Endpoints Principais
 
 | Método | Endpoint | Descrição |
@@ -128,7 +142,9 @@ Para rodar via Visual Studio é mais simples, basta acessar a solution da API e 
 
 <img width="1250" height="925" alt="Image" src="https://github.com/user-attachments/assets/0323104d-71d8-467d-8b8f-77d6b6ec3dbd" />
 
+### Tela da instância EC2
 
+<img width="1904" height="845" alt="Image" src="https://github.com/user-attachments/assets/c5a2e3e2-487d-4d64-ae8c-9dbae3bf79ea" />
 ---
 
 ## 👨‍💻 Autor
